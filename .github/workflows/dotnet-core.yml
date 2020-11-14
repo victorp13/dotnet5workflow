@@ -1,7 +1,7 @@
 name: .NET Core
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -13,19 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
+    - name: Setup .NET 5
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
-    - name: Install dependencies
-      run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release
     - name: dotnet publish
-      run:  dotnet publish -c Release -o dotnetcorewebapp 
+      run:  dotnet publish -c Release -o dotnet5webapp 
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
         app-name: dotnet5workflow
         publish-profile: ${{ secrets.AZURE_APP_SERVICE_PUBLISHSETTINGS }}
-        package: './dotnetcorewebapp' 
+        package: './dotnet5webapp' 
