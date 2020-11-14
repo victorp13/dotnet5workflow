@@ -1,4 +1,4 @@
-## .NET 5 workflow, publish to Azure Web Apps
+# .NET 5 workflow: Publish to Azure Web Apps
 
 This example .NET 5 Webapp project has a Github Actions [workflow file](.github/workflows/dotnet5.yml) that builds, publishes & deploys to an Azure Web App.
 
@@ -14,22 +14,27 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Setup .NET 5
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
+
     - name: Build
       run: dotnet build --configuration Release
+
     - name: dotnet publish
       run:  dotnet publish -c Release -o dotnet5webapp 
+      
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
         app-name: dotnet5workflow
         publish-profile: ${{ secrets.AZURE_APP_SERVICE_PUBLISHSETTINGS }}
         package: './dotnet5webapp' 
+```
+The magic happens on the line where the dotnet-version is set to 5.0.100 -- otherwise the steps are similar to the default dotnet core workflow.
